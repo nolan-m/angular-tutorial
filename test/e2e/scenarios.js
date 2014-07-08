@@ -24,5 +24,13 @@ describe('PhoneCat App', function() {
       query.sendKeys('motorola');
       expect(phoneList.count()).toBe(2);
     });
+
+    it('should display the current filter value in the title bar ', function() {
+      expect(browser.getTitle()).toMatch(/Google Phone Gallery:\s*$/);
+
+      element(by.model('query')).sendKeys('nexus');
+
+      expect(browser.getTitle()).toMatch(/Google Phone Gallery: nexus$/)
+    });
   });
 });
