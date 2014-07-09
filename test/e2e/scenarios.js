@@ -3,13 +3,20 @@
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
 
 describe('PhoneCat App', function() {
+  it('should redirect index.html to index.html#phones', function() {
+    browser.get('app/index.html');
+    browser.getLocationAbsUrl().then(function(url) {
+      expect(url.split('#')[1]).toBe('/phones');
+    });
+  });
+
   describe('Phone list view', function() {
 
     beforeEach(function(){
       browser.get('app/index.html');
     });
 
-    it('should filter the phone list as user types into the search bax', function(){
+    it('should filter the phone list as user types into the search box', function(){
 
       var phoneList = element.all(by.repeater('phone in phones'));
       var query = element(by.model('query'));
@@ -23,14 +30,6 @@ describe('PhoneCat App', function() {
 
       query.sendKeys('motorola');
       expect(phoneList.count()).toBe(8);
-    });
-
-    it('should display the current filter value in the title bar ', function() {
-      expect(browser.getTitle()).toMatch(/Google Phone Gallery:\s*$/);
-
-      element(by.model('query')).sendKeys('nexus');
-
-      expect(browser.getTitle()).toMatch(/Google Phone Gallery: nexus$/)
     });
 
     it('should be possible to control phone order via the drop down select box', function() {
@@ -66,6 +65,18 @@ describe('PhoneCat App', function() {
       browser.getLocationAbsUrl().then(function(url) {
         expect(url.split('#')[1]).toBe('/phones/nexus-s');
       });
+    });
+  });
+
+  describe('Phone detail view', function() {
+
+    beforeEach(function() {
+      browser.get('app/index.html#/phones/nexus-s');
+    });
+
+
+    it('should display placeholder page with phoneId', function() {
+      expect(element(by.binding('phoneId')).getText()).toBe('nexus-s');
     });
   });
 });
